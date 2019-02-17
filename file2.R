@@ -30,7 +30,7 @@ hist(mtcars$mpg,breaks=3)
 
 
 #vectors
-x=c(1,2,5,7) #c is variable to join x and data
+x=c(1,2,5,7) #c is variable to join x and data(to create vector)
 x
 class(x)#created data set,class telling type of object i.e numeric type vector
 
@@ -150,9 +150,9 @@ quantile(students$marks1, probs=seq(0,1,0.01))#percentile
 #seq=(from=1,to=100,by=3)
 #in quartile seq=(0,1,0.25, 0.5, 0.75, 1)
 str(students)
-students$rollno=as.character(students$rollno)
+students$rollno=as.character(students$rollno)#convert into character
 students$sname=as.character(students$snames)
-str(students)
+str(students)#gives structure like char-count,numbers-max and min
 summary(students)
 head(students)
 write.csv(students,'fms.csv',row.names=F)
@@ -182,3 +182,4 @@ students %>% filter(gender=='M' )
 students %>% group_by(gender) %>% summarise(mean(marks1),mean(marks2))
 students %>% group_by(college)%>% summarise(max(marks1),max(marks2))
 students %>% filter(college=='fms') %>% select(marks1,marks2)
+
