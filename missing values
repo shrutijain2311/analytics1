@@ -1,0 +1,52 @@
+#exploratory data analysis
+#missing value analysis
+library(Hmisc)
+library(rpart)
+library(DMwR)
+library(mice)
+
+path = 'https://raw.githubusercontent.com/nikhlesh17/Training/master/titanic.csv'
+titanic <- read.csv(path)
+is.na(titanic$survived)#command to find missing values
+sum(is.na(titanic$survived))
+sum(is.na(titanic$age))
+sapply(titanic,function(x) sum(is.na(x)))#gives total missing values in each column. #apply is basically substitute for "for loop"
+mean(titanic$age)#as it has missing values so NA is output
+nrow(titanic)
+mean(titanic$age,na.rm = T)#na.rm is command to remove missing values
+
+complete.cases(titanic)  # which row have complete data in T/ F
+sum(complete.cases(titanic))  # no of rows have which no missing data
+sum(!complete.cases(titanic))  # no of rows which have missing data
+titanic_cc <- titanic[complete.cases(titanic),]  #rows which are complete(remove rows with missing values)
+titanic_ncc <- titanic[!complete.cases(titanic),] #rows which have missing values
+str(titanic_cc)
+str(titanic_ncc)#missing values in this data set
+
+impute(titanic$age,mean)#filling in the missing values in age column with mean value of age column
+impute(titanic$age,median)#when observations have lot of variations or skewed then use median if normal distribution use mean
+impute(titanic$age,100)#star will help to identify the missing values
+
+#knn imputation-based on ohter columns already filled, fill the missing values based on the nearest neighbour i.e. similar 
+library(DMwR)
+#knn= k nearest neighbour.
+knnOutput <- knnImputation(titanic[, !names(titanic) %in% "survived"])#including all the variables except survived data  
+anyNA(knnOutput)# anyNA checking if any missing values in the data
+sapply(knnOutput,function(x) sum(is.na(x)))
+
+# takes time to run
+mice1 <- mice(titanic[, !names(titanic) %in% "survived"], method="rf")  # perform mice imputation, based on random forests.can be used for multiple missing values even for character and factors.
+
+#This is where we can see the values
+mice1$imp$age
+
+# Pick the one which seems fine 
+miceOutput <- complete(mice1,1)  # generate the completed data(by default first)
+anyNA(miceOutput)
+
+#logistic regression creation
+str(titanic)
+g1=glm(survived~age+sex,data=titanic,family='binomial')
+summary(g1)
+
+
