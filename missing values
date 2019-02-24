@@ -36,7 +36,7 @@ sapply(knnOutput,function(x) sum(is.na(x)))
 
 # takes time to run
 mice1 <- mice(titanic[, !names(titanic) %in% "survived"], method="rf")  # perform mice imputation, based on random forests.can be used for multiple missing values even for character and factors.
-
+#gives multiple values and you choose
 #This is where we can see the values
 mice1$imp$age
 
